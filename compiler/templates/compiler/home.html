@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Python Code Compiler</title>
+    <!-- Prism.js CSS -->
+<!-- CodeMirror CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material.min.css">
+
+<!-- CodeMirror JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+
+</head>
+<body>
+    <h2>Online Python Compiler</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label><strong>Code:</strong></label><br>
+        <textarea id="code" name="code">{{ code }}</textarea>
+        <pre><code id="highlightedCode" class="language-python"></code></pre>
+
+
+        <h3>Test Case 1</h3>
+        <label>Input:</label><br>
+        <textarea name="input1" rows="3" cols="80">{{ input1 }}</textarea><br>
+        <label>Expected Output:</label><br>
+        <textarea name="expected1" rows="3" cols="80">{{ expected1 }}</textarea><br><br>
+
+        <h3>Test Case 2</h3>
+        <label>Input:</label><br>
+        <textarea name="input2" rows="3" cols="80">{{ input2 }}</textarea><br>
+        <label>Expected Output:</label><br>
+        <textarea name="expected2" rows="3" cols="80">{{ expected2 }}</textarea><br><br>
+
+        <button type="submit">Run Test Cases</button>
+    </form>
+
+    <hr>
+
+    <h3>Results:</h3>
+    {% if results %}
+        {% for result in results %}
+            <p><strong>Test Case {{ forloop.counter }}:</strong> {{ result }}</p>
+        {% endfor %}
+    {% else %}
+        <p>No test case results yet.</p>
+    {% endif %}
+
+
+    <script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: "python",
+        lineNumbers: true,
+        theme: "material",
+        indentUnit: 4,
+        tabSize: 4,
+        matchBrackets: true,
+    });
+
+    // On form submit, sync CodeMirror content to textarea
+    document.querySelector('form').addEventListener('submit', function () {
+        editor.save(); // Sync content back to textarea
+    });
+</script>
+
+
+
+</body>
+</html>
